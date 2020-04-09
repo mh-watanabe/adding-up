@@ -31,6 +31,7 @@ rl.on('line', (lineString) => {
 });
 
 rl.on('close', () => {
+    prefectureDataMap.delete('都道府県名');
     for(let [key , value] of prefectureDataMap ){
        value.change = value.popu15 / value.popu10 * 100 ;
        value.change = value.change.toFixed(1);
@@ -38,9 +39,9 @@ rl.on('close', () => {
     const rankingArray = Array.from(prefectureDataMap).sort((pair1, pair2) => {
         return pair2[1].change - pair1[1].change;
     });
-    const rankingStrings = rankingArray.map(([key, value]) => {
-        ws.write( key + ',' + rankingArray.popu10 + ',' + value.popu15 + ',' + value.change + '%' + '\n');
-        return key + ': ' + value.popu10 + '=>' + value.popu15 + ' 変化率:' + value.change;
+    const rankingStrings = rankingArray.map(([key, value],i) => {
+        ws.write( (i + 1)  + ',' + key + ',' + rankingArray.popu10 + ',' + value.popu15 + ',' + value.change + '%' + '\n');
+        return (i + 1) + ','  + key + ': ' + value.popu10 + '=>' + value.popu15 + ' 変化率:' + value.change;
       }); 
     console.log(rankingStrings);
 });
